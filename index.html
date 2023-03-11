@@ -1,0 +1,500 @@
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>photo ai-ssistant</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
+
+        @import url('https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap');
+        :root {
+            --color-primary: #ab79d6;
+            --color-on-primary: #351d4a;
+            --color-secondary: #d367c1;
+            --color-background: #27272c;
+            --color-on-background: #bdbdcc;
+            --color-background-alt: #1e1c22;
+            --color-background-alt-alpha: rgba(30, 28, 34, .75);
+            --color-inverse: #fff;
+            --color-gray: #8e8e8e;
+            --color-yellow: #dedf40;
+            --color-green: #62cb5c;
+            --color-blue: #00bbcb;
+            --color-on-blue: #004a09;
+            --gradient: var(--color-secondary) 10%, var(--color-yellow) 25%, var(--color-green) 50%, var(--color-blue) 75%, var(--color-primary) 90%;
+            --brand-font: "Roboto Condensed", sans-serif;
+            --brand-font-weight: 800;
+            --brand-font-alt: "Roboto Condensed", sans-serif;
+            --brand-font-alt-weight: normal;
+            --brand-font-alt-weight-bold: 500;
+        }
+
+        /* Apply a solid background to the body and center its content */
+        body {
+  background-color: var(--color-background);
+  color: var(--color-on-background);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 1em;
+}
+
+h1, h2 {
+  font-family: 'Press Start 2P', cursive;
+  font-weight: bold;
+  text-align: center;
+  text-shadow: 0 0 0.5em var(--color-primary);
+  margin: 1.5em 1;
+}
+
+h1, form {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+h1 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1em;
+  color: white;
+  text-align: center;
+  font-size: 2rem;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+button, .cta-button {
+  border-radius: 0.5em;
+  border: none;
+  padding: 0.5em 1em;
+  background: var(--color-primary);
+  color: var(--color-background);
+  transition: all ease-in-out .3s;
+  cursor: pointer;
+}
+
+button:hover, .cta-button:hover {
+  background: var(--color-secondary);
+}
+
+.cta-button {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  background: var(--color-secondary);
+}
+
+a {
+  text-decoration: none;
+  color: var(--color-primary);
+}
+
+a:hover {
+  text-decoration: underline;
+  color: var(--color-secondary);
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+form {
+  width: 100%;
+  max-width: 30em;
+  margin: 3em 3em 2em 44em;
+    display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+    /* Style the form labels with a bold font and some margin */
+    form label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 0.01em;
+        color: var(--text-color);
+        font-family: 'Roboto Condensed', sans-serif;
+        font-size: 1.1rem;
+    }
+    
+    /* Style the form inputs with a rounded border and some padding */
+    form input {
+        border-bottom: 0.125em solid var(--text-color);
+        border-radius: 0.0em;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        font-family: 'Roboto Condensed', sans-serif;
+        font-size: 1.1rem;
+        padding: 0.0em;
+    
+    
+    }
+    
+    /* Change the form inputs color and border on focus */
+    form input:focus {
+        outline: none;
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+    
+    /* Add a transition effect to the form inputs */
+    form input {
+        background: rgba(255, 255, 255, 0.055);
+        box-shadow: 0 8px 32px 0 rgba(31, 114, 135, 0.37);
+        backdrop-filter: blur(6.5px);
+        -webkit-backdrop-filter: blur(6.5px);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    
+    /* Style the submit button with a background color and some padding */
+    form button {
+        background: rgba(255, 255, 255, 0.25);
+        box-shadow: 0 8px 32px 0 rgba(31, 114, 135, 0.37);
+        backdrop-filter: blur(6.5px);
+        -webkit-backdrop-filter: blur(6.5px);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    
+    /* Change the submit button color and border on hover */
+    form button:hover {
+        background: rgba(255, 255, 255, 0.25);
+        box-shadow: 0 8px 32px 0 rgba(31, 114, 135, 0.37);
+        backdrop-filter: blur(6.5px);
+        -webkit-backdrop-filter: blur(6.5px);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    
+    /* Center the submit button */
+    form button {
+        background: rgba(255, 255, 255, 0.25);
+        box-shadow: 0 8px 32px 0 rgba(31, 114, 135, 0.37);
+        backdrop-filter: blur(6.5px);
+        -webkit-backdrop-filter: blur(6.5px);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    
+
+/* Style the form labels with a bold font and some margin */
+label {
+  flex-basis: 30%;
+  font-weight: bold;
+  margin-right: 1em;
+  display: flex;
+  align-items: center;
+}
+
+input[type="text"],
+textarea {
+flex-basis: 70%;
+}
+
+button[type="submit"] {
+margin: 1em auto;
+padding: 0.5em 1em;
+background-color: #4CAF50;
+color: white;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+}
+
+button[type="submit"]:hover {
+background-color: #45a049;
+}
+
+.error {
+color: red;
+font-style: italic;
+}
+
+.success {
+color: green;
+font-style: italic;
+}
+
+        img {
+          position: absolute;
+            top: 10em;
+            left: 40%;
+            transform: translate(-50%, 10%);
+            width: 480px;
+            height: 760px;
+            background: rgba(44, 39, 39, 0);
+            box-shadow: 0 8px 32px 0 rgba(31, 114, 135, 0.37);
+            backdrop-filter: blur(6.5px);
+            -webkit-backdrop-filter: blur(6.5px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .image-placeholder {
+            position: absolute;
+            top: 10em;
+            left: 40%;
+            transform: translate(-50%, 10%);
+            width: 480px;
+            height: 760px;
+            background: rgba(44, 39, 39, 0);
+            box-shadow: 0 8px 32px 0 rgba(31, 114, 135, 0.37);
+            backdrop-filter: blur(6.5px);
+            -webkit-backdrop-filter: blur(6.5px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        @media screen and (max-width: 1000px) {
+body {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+padding: 1em;
+margin-top: 2em;
+margin-bottom: 2em;
+}
+
+h1 {
+margin-top: 1em;
+margin-bottom: 2em;
+margin-right: 2em;
+}
+
+form {
+margin: 3em 0 2em 0;
+margin-bottom: 2em;
+}
+
+.image-placeholder {
+  margin: 25em 0 2em 0;
+margin-bottom: 2em;
+margin-left: 10%;
+}
+}
+
+
+    </style>
+
+
+<body>
+  <h1>photo ai-ssistant</h1>
+    <div id="generated-image"></div>
+    <div class="image-placeholder"></div>
+
+</body>
+
+
+<script>
+    let prompt = "";
+
+    const makeupType = document.getElementById('makeup-type').value;
+    if (makeupType) {
+        prompt += `, ${makeupType}`;
+    }
+
+    const hairstyle = document.getElementById('hairstyle').value;
+    if (hairstyle) {
+        prompt += `, ${hairstyle}`;
+    }
+
+    const style = document.getElementById('style').value;
+    if (style) {
+        prompt += `, ${style}`;
+    }
+
+</script>
+
+
+<form id="api-form">
+    <input type="hidden" id="key" name="key" value="fSooHmbib5eONFVnahTsxEfzPZD3s7QR9PsYziYuOunO9QICJRBXLkq6wa7w">
+
+    <input type="hidden" id="prompt" name="prompt"
+        value="detailed portrait photograph, cinematic lighting, Canon EOS R3, nice eyes, beauty dish, sharp image, f/22, film grain, leica m6, ISO 200, 1/160s, RAW, unedited, symmetrical balance, in-frame"><br>
+
+    <label for="portrait-subject">Portrait Subject:</label><br>
+    <input type="text" id="portrait-subject" name="portrait_subject" value=""><br>
+
+    <label for="makeup-type">Makeup Type:</label><br>
+    <input type="text" id="makeup-type" name="makeup_type" value=""><br>
+
+    <label for="hairstyle">Hairstyle:</label><br>
+    <input type="text" id="hairstyle" name="hairstyle" value=""><br>
+
+    <label for="style">Style:</label><br>
+    <select id="style" name="style" onchange="updatePrompt()">
+        <option value="">--Choose a style--</option>
+        <option value="horror/gothic">horror</option>
+        <option value="vintage">vintage</option>
+    </select>
+
+    <input type="hidden" id="negative-prompt" name="negative_prompt"
+        value="cartoon, 3d, (disfigured)+, naked, sex, nudity, porn, (bad art)+, (deformed)+, (poorly drawn)+, (extra limbs)+, (close up)+, strange colours, blurry, boring, sketch, lackluster, signature, letters, watermark, painting, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, deformed, blurry, extra limbs, cloned face, skinny, glitchy, double torso, extra arms, extra hands, mangled fingers, missing lips, ugly face, distorted face, extra legs, anime"><br>
+    <label for="width"></label><br>
+    <input type="hidden" id="width" name="width" value="480"><br>
+
+    <label for="height"></label><br>
+    <input type="hidden" id="height" name="height" value="760"><br>
+
+    <input type="hidden" id="samples" name="samples" value="1"><br>
+
+    <input type="hidden" id="steps" name="num_inference_steps" value="20"><br>
+
+
+    <input type="hidden" id="model_id" name="model_id" value="analog-diffusion">
+
+    <input type="hidden" id="seed" name="seed" value="">
+    <input type="hidden" id="guidance-scale" name="guidance_scale" value="">
+    <input type="hidden" id="safety-checker" name="safety_checker" value="no">
+    <input type="hidden" id="webhook" name="webhook" value="">
+    <input type="hidden" id="track-id" name="track_id" value="">
+    <input type="button" id="generate-button" value="Generate Image" onclick="submitForm()">
+
+   
+</form>
+</head>
+
+<body>
+    <script>
+        const styleSentences = {
+            "horror/gothic": "horror, frightening, evil, witch, magic, skulls, death, dark",
+            "vintage": " 90s vintage photography, leica photo",
+            "impressionism": "aiming to capture the impression of the moment and the shifting quality of light",
+            "cubism": "breaking down objects into geometric shapes and depicting them from multiple perspectives",
+            "realism": "striving to depict the world as it really is"
+        };
+
+        function updatePrompt() {
+            const selectedOption = document.getElementById('style').value;
+            const sentence = styleSentences[selectedOption];
+            document.getElementById('prompt').value = `${sentence} photorealistic, 3d appearance, leica, film grain, f22, detailed photography portrait, beauty dish, sharp image, f/22, film grain, leica m6, RAW, unedited, symmetrical balance, sharp image, f/22, lumen global illumination, featured on cg`;
+        }
+        function disableButton() {
+            var generateButton = document.getElementById("generateButton");
+            generateButton.disabled = true;
+            setTimeout(function () {
+                generateButton.disabled = false;
+            }, 60000); // 1 minute in milliseconds
+        }
+    </script>
+
+    <script>
+
+    </script>
+    <script>
+function submitForm() {
+  const form = document.getElementById('api-form');
+
+  // Get additional input values
+  const makeupType = document.getElementById('makeup-type').value;
+  const hairstyle = document.getElementById('hairstyle').value;
+  const portraitsubject = document.getElementById('portrait-subject').value;
+
+  // Modify prompt based on additional input values
+  let prompt = '';
+  if (portraitsubject) {
+    prompt += `${portraitsubject}, `;
+  }
+  if (makeupType) {
+    prompt += `${makeupType} makeup, `;
+  }
+  if (hairstyle) {
+    prompt += `${hairstyle} hair, `;
+  }
+
+  prompt += document.getElementById('prompt').value;
+  // Create JSON object with input values
+const data = {
+    key: document.getElementById('key').value,
+    prompt: prompt,
+    negative_prompt: document.getElementById('negative-prompt').value,
+    width: document.getElementById('width').value,
+    height: document.getElementById('height').value,
+    samples: document.getElementById('samples').value,
+    num_inference_steps: document.getElementById('steps').value,
+    model_id: document.getElementById('model_id').value,
+    seed: document.getElementById('seed').value,
+    guidance_scale: document.getElementById('guidance-scale').value,
+    safety_checker: document.getElementById('safety-checker').value,
+    webhook: document.getElementById('webhook').value,
+    track_id: document.getElementById('track-id').value,
+};
+
+  // Send API request with JSON data
+  const generatedImageContainer = document.getElementById('generated-image');
+  const outputImageContainer = document.getElementById('output-image');
+
+  function checkProcessingStatus(data, outputImageContainer) {
+    if (data.status === 'processing') {
+      setTimeout(() => {
+        fetch(`https://stablediffusionapi.com/api/v3/fetch/${data.id}`)
+          .then(response => response.json())
+          .then(data => {
+            checkProcessingStatus(data, outputImageContainer);
+          })
+          .catch(error => console.error(error));
+      }, 30000); // Wait for 30 seconds before checking again
+    } else if (data.status === 'success') {
+      // Load the generated image
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const generatedImage = new Image();
+      generatedImage.onload = function () {
+        canvas.width = generatedImage.width;
+        canvas.height = generatedImage.height;
+        ctx.drawImage(generatedImage, 0, 0);
+        outputImageContainer.innerHTML = '';
+        outputImageContainer.appendChild(canvas);
+      };
+      generatedImage.src = data.output[0];
+    }
+  }
+
+  fetch('http://localhost:3020/api/v3/text2img', {
+    method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+
+      if (data.status === 'processing') {
+        setTimeout(() => {
+          fetch(`http://localhost:3020/api/v3/fetch/${data.id}`)
+            .then(response => response.json())
+            .then(data => {
+              checkProcessingStatus(data, outputImageContainer);
+            })
+            .catch(error => console.error(error));
+        }, 60000); // Wait for 30 seconds before checking again
+      } else if (data.status === 'success') {
+        const generatedImage = new Image();
+        generatedImage.onload = function () {
+          outputImageContainer.innerHTML = '';
+          outputImageContainer.appendChild(generatedImage);
+        };
+        generatedImage.src = data.output[0];
+      }
+    })
+    .catch(error => console.error(error));
+}
+
+    </script>
+    <div id="output-image"></div>
+</body>
